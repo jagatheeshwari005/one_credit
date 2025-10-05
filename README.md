@@ -1,53 +1,127 @@
-# Getting Started with Create React App
+# Event Management App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack MERN (MongoDB, Express.js, React.js, Node.js) application for managing events. Users can create accounts, log in, and browse or create events.
+
+## Features
+
+- User authentication (Register/Login)
+- View all events
+- Create new events
+- Responsive design
+- Clean and modern UI
+
+## Prerequisites
+
+- Node.js (v14 or later)
+- npm or yarn
+- MongoDB (local or cloud instance)
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd event-management
+```
+
+### 2. Install Dependencies
+
+```bash
+# Install server dependencies
+cd server
+npm install
+
+# Install client dependencies
+cd ../client
+npm install
+```
+
+### 3. Environment Setup
+
+Create a `.env` file in the root directory with the following variables:
+
+```
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+NODE_ENV=development
+```
+
+### 4. Start the Application
+
+#### Development Mode
+
+```bash
+# Start the server (from the root directory)
+npm run server
+
+# In a new terminal, start the React app
+npm start
+```
+
+The application will be available at `http://localhost:3000`
+
+#### Production Mode
+
+```bash
+# Build the React app
+npm run build
+
+# Start the production server
+NODE_ENV=production node server/index.js
+```
+
+## Project Structure
+
+```
+event-management/
+├── client/                 # Frontend React application
+│   ├── public/             # Static files
+│   └── src/                # React source code
+│       ├── components/     # Reusable UI components
+│       ├── context/        # React context providers
+│       ├── pages/          # Page components
+│       └── App.js          # Main App component
+├── server/                 # Backend Express server
+│   ├── config/             # Configuration files
+│   ├── controllers/        # Route controllers
+│   ├── middleware/         # Custom middleware
+│   ├── models/             # MongoDB models
+│   ├── routes/             # API routes
+│   └── index.js            # Server entry point
+├── .env                   # Environment variables
+└── package.json           # Project dependencies and scripts
+```
 
 ## Available Scripts
 
 In the project directory, you can run:
 
-### `npm start`
+- `npm start` - Start the React development server
+- `npm run server` - Start the backend server
+- `npm run dev` - Start both frontend and backend in development mode (using concurrently)
+- `npm run build` - Build the React app for production
+- `npm test` - Run tests
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technologies Used
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Frontend**: React.js, React Router, Tailwind CSS, React Icons
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB with Mongoose ODM
+- **Authentication**: JWT (JSON Web Tokens)
 
-### `npm test`
+## Contributing
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-### `npm run build`
+## License
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ### Analyzing the Bundle Size
 
