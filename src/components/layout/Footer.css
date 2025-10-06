@@ -1,0 +1,87 @@
+/* General Footer Styles */
+.footer {
+  background-color: #001f3f; /* Navy blue to match header */
+  color: #fff; /* Footer text color set to white for contrast */
+  padding: 3rem 1rem;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.footer-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* Footer Branding */
+.footer-brand .title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff; /* Footer heading color set to white */
+  margin-bottom: 0.5rem;
+}
+
+.footer-brand .subtitle {
+  font-size: 0.875rem;
+}
+
+/* Footer Links */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.footer-links .column .heading {
+  font-weight: 600;
+  color: #fff; /* Footer column headings in white */
+  margin-bottom: 1rem;
+}
+
+.footer-links .column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-links .column a,
+.footer-links .column span {
+  color: #d1d5db; /* Light gray for links */
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links .column a:hover {
+  color: #fff;
+}
+
+/* Footer Bottom/Copyright */
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.15); /* subtle border */
+  padding-top: 2rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #d1d5db; /* muted light text */
+}
+
+/* Responsive Styles */
+@media (min-width: 640px) {
+  .footer-main {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .footer-links {
+    flex-direction: row;
+    gap: 4rem;
+  }
+}

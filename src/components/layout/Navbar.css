@@ -1,0 +1,177 @@
+/* General Navbar Styles */
+.navbar {
+  background-color: #001f3f; /* Navy blue background */
+  color: white;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo and Title */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  gap: 0.75rem;
+}
+
+.navbar-logo .icon {
+  font-size: 1.75rem;
+}
+
+.navbar-logo .title {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Navigation Links (for desktop) */
+.nav-menu {
+  display: none; /* Hidden by default on mobile */
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-menu a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-menu a:hover {
+  color: #c7d2fe;
+  border-bottom-color: #c7d2fe;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-actions .logout-button,
+.nav-actions .signup-button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.nav-actions .logout-button:hover,
+.nav-actions .signup-button:hover {
+  transform: translateY(-2px);
+}
+
+.nav-actions .logout-button {
+  background-color: #ef4444;
+  color: white;
+}
+
+.nav-actions .logout-button:hover {
+  background-color: #dc2626;
+}
+
+.nav-actions .signup-button {
+  background-color: white;
+  color: #2a6dfc;
+}
+
+.nav-actions .signup-button:hover {
+  background-color: #f0f2f5;
+}
+
+/* Mobile Menu Button (Hamburger) */
+.mobile-menu-button {
+  display: block;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* Styles for the mobile menu when it's open */
+.nav-menu-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: #2a6dfc;
+  position: absolute;
+  top: 100%; /* Position below the navbar */
+  left: 0;
+  width: 100%;
+  padding: 2rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.admin-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.admin-link:hover {
+  color: #f59e0b !important;
+  border-bottom-color: #f59e0b !important;
+}
+
+.cart-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #667eea;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.cart-link:hover {
+  color: #5a67d8;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+}
+
+/* Desktop Styles */
+@media (min-width: 768px) {
+  .mobile-menu-button {
+    display: none;
+  }
+  .nav-menu {
+    display: flex;
+  }
+}
