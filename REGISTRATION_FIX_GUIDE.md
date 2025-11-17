@@ -62,23 +62,23 @@ node seed-professional-events.js
 
 ## 🎯 Professional Events Created
 
-1. **Tech Innovation Summit 2024** - $299
+1. **Tech Innovation Summit 2024** - 15000
    - 500 attendees, San Francisco
    - AI, Innovation, Networking
 
-2. **Digital Marketing Masterclass** - $199
+2. **Digital Marketing Masterclass** - 20000
    - 150 attendees, New York
    - SEO, Social Media, Analytics
 
-3. **Sustainable Business Conference** - $249
+3. **Sustainable Business Conference** - 25000
    - 300 attendees, Seattle
    - Sustainability, Environment, ESG
 
-4. **Leadership Excellence Workshop** - $399
+4. **Leadership Excellence Workshop** - 30000
    - 50 attendees, Chicago
    - Leadership, Management, Soft Skills
 
-5. **FinTech Innovation Forum** - $349
+5. **FinTech Innovation Forum** - 
    - 200 attendees, Boston
    - Blockchain, Cryptocurrency, Digital Banking
 

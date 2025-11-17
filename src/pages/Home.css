@@ -287,6 +287,8 @@
 .events-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-auto-rows: 1fr; /* allow rows to match tallest card while keeping all cells equal */
+  align-items: stretch;
   gap: 2rem;
   margin-top: 2rem;
 }

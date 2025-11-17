@@ -4,7 +4,6 @@ import { FaCalendarAlt, FaUsers, FaMapMarkerAlt, FaArrowRight, FaTicketAlt, FaSt
 import axios from 'axios';
 import EventCard from '../components/EventCard';
 import Carousel from '../components/Carousel';
-import Gallery from '../components/Gallery';
 import './Home.css';
 
 const Home = () => {
@@ -98,21 +97,21 @@ const Home = () => {
             <div className="stat-item">
               <FaUsers className="stat-icon" />
               <div className="stat-content">
-                <span className="stat-number">10,000+</span>
+                <span className="stat-number">0</span>
                 <span className="stat-label">Active Users</span>
               </div>
             </div>
             <div className="stat-item">
               <FaCalendarAlt className="stat-icon" />
               <div className="stat-content">
-                <span className="stat-number">500+</span>
+                <span className="stat-number">0</span>
                 <span className="stat-label">Events Monthly</span>
               </div>
             </div>
             <div className="stat-item">
               <FaStar className="stat-icon" />
               <div className="stat-content">
-                <span className="stat-number">4.9</span>
+                <span className="stat-number">0</span>
                 <span className="stat-label">User Rating</span>
               </div>
             </div>
@@ -154,16 +153,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Gallery Section */}
-      <Gallery images={[
-        { src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80', alt: 'Event 1' },
-        { src: 'https://images.unsplash.com/photo-1515165562835-c6a203c84f6f?auto=format&fit=crop&w=1200&q=80', alt: 'Event 2' },
-        { src: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=1200&q=80', alt: 'Event 3' },
-        { src: 'https://images.unsplash.com/photo-1515165562835-c6a203c84f6f?auto=format&fit=crop&w=1200&q=80', alt: 'Event 4' },
-        { src: '/marriage.jpg', alt: 'Event 5' },
-        { src: 'https://images.unsplash.com/photo-1485217988980-11786ced9454?auto=format&fit=crop&w=1200&q=80', alt: 'Event 6' }
-      ]} />
-
+      
       {/* Features Section */}
       <section className="features-section">
         <div className="container mx-auto px-4 py-16">
