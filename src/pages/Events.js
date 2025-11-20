@@ -325,8 +325,8 @@ const Events = () => {
         </div>
       ) : (
         <div className="events-grid">
-          {filteredEvents.map((event) => (
-            <EventCard key={event._id} event={event} />
+          {filteredEvents.map((event, idx) => (
+            <EventCard key={event._id} event={event} index={idx} />
           ))}
         </div>
       )}

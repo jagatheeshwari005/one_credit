@@ -66,9 +66,17 @@ const EventDetails = () => {
     return colors[category] || colors.other;
   };
 
-  // Mock gallery images - in a real app, these would come from the event data
+  // Resolve image paths so relative URLs (e.g. 'uploads/..') work when served from public/
+  const resolveImage = (src) => {
+    if (!src) return '';
+    if (typeof src !== 'string') return '';
+    if (src.startsWith('http') || src.startsWith('/')) return src;
+    return `${process.env.PUBLIC_URL || ''}/${src}`;
+  };
+
+  // Gallery images (first one comes from event data if available)
   const galleryImages = [
-    event?.image || 'https://via.placeholder.com/800x600?text=Event+Image+1',
+    resolveImage(event?.image) || 'https://via.placeholder.com/800x600?text=Event+Image+1',
     'https://via.placeholder.com/800x600?text=Event+Image+2',
     'https://via.placeholder.com/800x600?text=Event+Image+3',
     'https://via.placeholder.com/800x600?text=Event+Image+4'

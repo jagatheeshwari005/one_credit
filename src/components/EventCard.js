@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaCalendarAlt, FaMapMarkerAlt, FaUsers, FaTicketAlt } from 'react-icons/fa';
 import './EventCard.css';
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event, index }) => {
   const navigate = useNavigate();
 
   const handleBookEvent = () => {
@@ -24,12 +24,7 @@ const EventCard = ({ event }) => {
     });
   };
 
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(price);
-  };
+  // price removed from card UI; keep formatting in other areas if needed
 
   const getCategoryColor = (category) => {
     const colors = {
@@ -44,27 +39,50 @@ const EventCard = ({ event }) => {
   };
 
   const availableSpots = event.maxAttendees - event.currentAttendees;
-  const isFullyBooked = availableSpots <= 0;
+
+  const [imgError, setImgError] = useState(false);
+
+  // compute image source once for easier debugging.
+  // Prefer the local sixth.jpg for the 6th card regardless of event.image (covers cases where event.image exists but is broken)
+  const imageSrc = index === 5
+    ? `${process.env.PUBLIC_URL || ''}/images/sixth.jpg`
+    : (event.image || 'https://via.placeholder.com/800x450?text=Event+Image');
+
+  // reset imgError whenever the computed image source changes so the image will be retried
+  useEffect(() => {
+    setImgError(false);
+  }, [imageSrc]);
+
+  // debug log to help trace missing images
+  // open browser console to see the chosen image URL for each card
+  // eslint-disable-next-line no-console
+  console.debug('EventCard image src for', event.title || event._id, imageSrc);
 
   return (
-    <div className="event-card">
+    <div className="event-card-component">
       <div className="event-image-container">
-        <img 
-          src={event.image || 'https://via.placeholder.com/400x300?text=Event+Image'} 
-          alt={event.title}
-          className="event-image"
-          onError={(e) => {
-            e.target.src = 'https://via.placeholder.com/400x300?text=Event+Image';
-          }}
-        />
+        {!imgError ? (
+          <img
+            src={imageSrc}
+            alt={event.title}
+            className="event-card-image"
+            onError={(e) => {
+              // eslint-disable-next-line no-console
+              console.warn('Image failed to load for', event._id || event.title, imageSrc, e?.type || 'onError');
+              setImgError(true);
+            }}
+          />
+        ) : (
+          <div
+            className="event-image-fallback"
+            aria-hidden="true"
+          />
+        )}
         <div 
           className="event-category"
           style={{ backgroundColor: getCategoryColor(event.category) }}
         >
           {event.category}
-        </div>
-        <div className="event-price">
-          {formatPrice(event.price)}
         </div>
       </div>
 
