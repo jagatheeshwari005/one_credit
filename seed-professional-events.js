@@ -21,7 +21,7 @@ const professionalEvents = [
     description: "Master the art of digital marketing with industry experts. Learn advanced SEO strategies, social media marketing, content creation, and data analytics. Perfect for marketers, entrepreneurs, and business owners looking to scale their digital presence.",
     date: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000), // 45 days from now
     location: "Business Center, New York, NY",
-    price: 199,
+    price: 20000,
     maxAttendees: 150,
     currentAttendees: 0,
     category: "marketing",
@@ -103,7 +103,7 @@ async function seedEvents() {
 
     console.log('\n🎉 Professional events seeded successfully!');
     console.log('\n📋 Event Summary:');
-    console.log('• Tech Innovation Summit 2024 - $299');
+    console.log('• Tech Innovation Summit 2024 - $30000.99');
     console.log('• Digital Marketing Masterclass - $199');
     console.log('• Sustainable Business Conference - $249');
     console.log('• Leadership Excellence Workshop - $399');

@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const auth = require('../middleware/auth');
+const adminAuth = require('../middleware/admin');
+const isAdmin = require('../middleware/isAdmin');
 const Event = require('../models/Event');
 
 // @route   GET api/events
@@ -25,7 +27,8 @@ router.get('/', async (req, res) => {
 router.post(
   '/',
   [
-    auth,
+    // Only admins may create events
+    adminAuth,
     [
       check('title', 'Title is required').not().isEmpty(),
       check('description', 'Description is required').not().isEmpty(),
@@ -63,6 +66,51 @@ router.post(
     }
   }
 );
+
+// @route   PUT api/events/:id
+// @desc    Update an event (admin only)
+// @access  Private/Admin
+router.put('/:id', [adminAuth], async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) {
+      return res.status(404).json({ msg: 'Event not found' });
+    }
+
+    // Update allowed fields
+    const updates = (({ title, description, date, location, price, image, category, maxAttendees }) => ({ title, description, date, location, price, image, category, maxAttendees }))(req.body);
+
+    Object.keys(updates).forEach(key => {
+      if (updates[key] !== undefined) event[key] = updates[key];
+    });
+
+    await event.save();
+    res.json(event);
+  } catch (err) {
+    console.error('Update event error:', err.message);
+    if (err.kind === 'ObjectId') return res.status(404).json({ msg: 'Event not found' });
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   DELETE api/events/:id
+// @desc    Delete an event (admin only)
+// @access  Private/Admin
+router.delete('/:id', [adminAuth], async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) {
+      return res.status(404).json({ msg: 'Event not found' });
+    }
+
+    await Event.findByIdAndDelete(req.params.id);
+    res.json({ msg: 'Event deleted successfully' });
+  } catch (err) {
+    console.error('Delete event error:', err.message);
+    if (err.kind === 'ObjectId') return res.status(404).json({ msg: 'Event not found' });
+    res.status(500).send('Server Error');
+  }
+});
 
 // @route   GET api/events/:id
 // @desc    Get event by ID

@@ -30,7 +30,14 @@ const AuthSuccess = () => {
         }
 
         toast.success('Successfully signed in with Google!');
-        navigate('/events'); // Redirect to events page after successful auth
+        // Redirect based on role
+        const refreshed = await refreshUser();
+        const role = refreshed?.role || 'user';
+        if (role === 'admin') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/dashboard');
+        }
       } else {
         toast.error('No authentication token received.');
         navigate('/login');

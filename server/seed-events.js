@@ -12,7 +12,7 @@ const sampleEvents = [
     description: "Join industry leaders for the biggest tech conference of the year. Learn about AI, blockchain, and the future of technology.",
     date: new Date('2024-03-15T09:00:00Z'),
     location: "San Francisco Convention Center",
-    price: 299.99,
+    price: 30000.99,
     image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop",
     category: "conference",
     maxAttendees: 500,

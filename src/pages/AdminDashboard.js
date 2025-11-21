@@ -139,6 +139,13 @@ const AdminDashboard = () => {
     });
   };
 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR'
+    }).format(price);
+  };
+
   if (loading) {
     return (
       <div className="admin-dashboard">
@@ -359,7 +366,7 @@ const AdminDashboard = () => {
                     </td>
                     <td>
                       <span className="total-amount">
-                        ${((booking.event?.price || 0) * booking.attendees).toFixed(2)}
+                        {formatPrice((booking.event?.price || 0) * booking.attendees)}
                       </span>
                     </td>
                     <td>

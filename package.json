@@ -36,6 +36,7 @@
     "server": "node server/index.js",
     "dev": "concurrently \"npm run start\" \"npm run server\"",
     "seed": "node server/seed.js",
+    "seed-admin": "node server/seed-admin.js",
     "seed-events": "node server/seed-events.js",
     "create-admin": "node create-admin.js"
   },

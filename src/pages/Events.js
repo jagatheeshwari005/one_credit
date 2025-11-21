@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import EventCard from '../components/EventCard';
-import { FaSearch, FaFilter, FaSort, FaCalendarAlt, FaMapMarkerAlt, FaDollarSign } from 'react-icons/fa';
+import { FaSearch, FaFilter, FaSort, FaCalendarAlt, FaMapMarkerAlt, FaRupeeSign } from 'react-icons/fa';
 import './Events.css';
 
 const Events = () => {
@@ -265,8 +265,8 @@ const Events = () => {
             <div className="filter-row">
               <div className="filter-group">
                 <label>
-                  <FaDollarSign className="label-icon" />
-                  Price Range
+                  <FaRupeeSign className="label-icon" />
+                  Price Range (INR)
                 </label>
                 <div className="price-range">
                   <input

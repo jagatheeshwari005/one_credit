@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { FaCalendarAlt, FaMapMarkerAlt, FaDollarSign, FaUsers, FaImage, FaTag } from 'react-icons/fa';
+import { FaCalendarAlt, FaMapMarkerAlt, FaRupeeSign, FaUsers, FaImage, FaTag } from 'react-icons/fa';
 import './CreateEvent.css';
 
 const CreateEvent = () => {
@@ -277,8 +277,8 @@ const CreateEvent = () => {
               {/* Price */}
               <div className="form-group">
                 <label htmlFor="price">
-                  <FaDollarSign className="label-icon" />
-                  Price *
+                  <FaRupeeSign className="label-icon" />
+                  Price (INR) *
                 </label>
                 <input
                   type="number"

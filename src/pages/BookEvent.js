@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { FaCalendarAlt, FaMapMarkerAlt, FaDollarSign, FaUsers, FaStar, FaGift } from 'react-icons/fa';
+import { FaCalendarAlt, FaMapMarkerAlt, FaRupeeSign, FaUsers, FaStar, FaGift } from 'react-icons/fa';
 import './BookEvent.css';
 
 const BookEvent = () => {
@@ -131,9 +131,9 @@ const BookEvent = () => {
   };
 
   const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'INR'
     }).format(price);
   };
 
@@ -176,7 +176,7 @@ const BookEvent = () => {
                 <span>{event.location}</span>
               </div>
               <div className="meta-item">
-                <FaDollarSign className="meta-icon" />
+                <FaRupeeSign className="meta-icon" />
                 <span>{formatPrice(event.price)} per person</span>
               </div>
               <div className="meta-item">

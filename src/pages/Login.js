@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle, FaEnvelope, FaLock } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import axiosInstance from '../utils/axiosConfig';
+import { useAuth } from '../context/AuthContext';
 import './Form.css'; // Import the shared CSS file
 
 const Login = () => {
@@ -13,6 +14,7 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login, user } = useAuth();
 
   const { email, password } = formData;
 
@@ -30,22 +32,23 @@ const Login = () => {
     setLoading(true);
 
     try {
-      console.log('Sending login request...');
+      console.log('Sending login request via AuthContext...');
 
-      const res = await axiosInstance.post('/api/auth/login', { email, password });
-
-      console.log('Login response:', res.data);
-
-      // Store token
-      localStorage.setItem('token', res.data.token);
-
-      // Store user data if available
-      if (res.data.user) {
-        localStorage.setItem('user', JSON.stringify(res.data.user));
+      const result = await login(email, password);
+      if (!result.success) {
+        toast.error(result.error || 'Login failed');
+        return;
       }
 
+      // AuthContext.login returns the loaded user; use it to decide redirect immediately
+      const returned = result.user || JSON.parse(localStorage.getItem('user') || 'null');
+      const role = returned?.role || 'user';
       toast.success('Login successful!');
-      navigate('/events');
+      if (role === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/dashboard');
+      }
 
     } catch (err) {
       console.error('Login error:', err);

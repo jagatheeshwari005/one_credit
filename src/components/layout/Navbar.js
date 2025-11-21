@@ -3,43 +3,23 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaCalendarAlt, FaUserShield, FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '../../context/CartContext';
 import ThemeToggle from '../ThemeToggle';
-import axios from 'axios';
+import { useAuth } from '../../context/AuthContext';
 import './Navbar.css'; // Import the CSS file
 
 const Navbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const { getCartItemCount, cartItems } = useCart();
+  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem('token');
 
   useEffect(() => {
-    checkAdminStatus();
-  }, [isAuthenticated]);
-
-  const checkAdminStatus = async () => {
-    if (!isAuthenticated) {
-      setIsAdmin(false);
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem('token');
-      const config = {
-        headers: {
-          'x-auth-token': token
-        }
-      };
-
-      await axios.get('/api/admin/dashboard', config);
-      setIsAdmin(true);
-    } catch (err) {
-      setIsAdmin(false);
-    }
-  };
+    setIsAdmin(Boolean(user && user.role === 'admin'));
+  }, [user]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     navigate('/login');
     setMobileMenuOpen(false); // Close menu on logout
   };
@@ -66,9 +46,11 @@ const Navbar = () => {
           <Link to="/events">Events</Link>
           {isAuthenticated && (
             <>
-              <Link to="/create-event" className="nav-link">
-                Create Event
-              </Link>
+              {isAdmin && (
+                <Link to="/create-event" className="nav-link">
+                  Create Event
+                </Link>
+              )}
               <Link to="/my-bookings" className="nav-link">
                 My Bookings
               </Link>
@@ -79,7 +61,7 @@ const Navbar = () => {
             </>
           )}
           {isAdmin && (
-            <Link to="/admin" className="admin-link">
+            <Link to="/admin/dashboard" className="admin-link">
               <FaUserShield /> Admin
             </Link>
           )}
@@ -113,7 +95,9 @@ const Navbar = () => {
           <Link to="/events" onClick={closeMobileMenu}>Events</Link>
           {isAuthenticated && (
             <>
-              <Link to="/create-event" onClick={closeMobileMenu}>Create Event</Link>
+              {isAdmin && (
+                <Link to="/create-event" onClick={closeMobileMenu}>Create Event</Link>
+              )}
               <Link to="/my-bookings" onClick={closeMobileMenu}>My Bookings</Link>
               <Link to="/cart" className="cart-link" onClick={closeMobileMenu}>
                 <FaShoppingCart /> Cart
@@ -124,7 +108,7 @@ const Navbar = () => {
             </>
           )}
           {isAdmin && (
-            <Link to="/admin" className="admin-link" onClick={closeMobileMenu}>
+            <Link to="/admin/dashboard" className="admin-link" onClick={closeMobileMenu}>
               <FaUserShield /> Admin
             </Link>
           )}

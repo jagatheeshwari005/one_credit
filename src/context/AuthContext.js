@@ -37,19 +37,21 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await axios.post('/api/auth/login', { email, password });
       const { token } = res.data;
-      
       localStorage.setItem('token', token);
       // Load user info after setting token
       try {
         const me = await axios.get('/api/auth/me', { headers: { 'x-auth-token': token } });
         setUser(me.data);
         setIsAuthenticated(true);
+        // persist user for quick reads by other modules
+        localStorage.setItem('user', JSON.stringify(me.data));
+        return { success: true, user: me.data };
       } catch (e) {
         // Fallback: set token-only user
         setUser({ token });
         setIsAuthenticated(true);
+        return { success: true, user: { token } };
       }
-      return { success: true };
     } catch (error) {
       console.error('Login failed:', error);
       return { success: false, error: error.response?.data?.msg || 'Login failed' };
@@ -60,17 +62,18 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await axios.post('/api/auth/register', { name, email, password });
       const { token } = res.data;
-      
       localStorage.setItem('token', token);
       try {
         const me = await axios.get('/api/auth/me', { headers: { 'x-auth-token': token } });
         setUser(me.data);
         setIsAuthenticated(true);
+        localStorage.setItem('user', JSON.stringify(me.data));
+        return { success: true, user: me.data };
       } catch (e) {
         setUser({ token });
         setIsAuthenticated(true);
+        return { success: true, user: { token } };
       }
-      return { success: true };
     } catch (error) {
       console.error('Registration failed:', error);
       return { success: false, error: error.response?.data?.msg || 'Registration failed' };

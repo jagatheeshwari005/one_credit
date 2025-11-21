@@ -6,6 +6,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -71,11 +72,11 @@ function App() {
           <Route
             path="/create-event"
             element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <main className="flex-grow container mx-auto px-4 py-8">
                   <CreateEvent />
                 </main>
-              </ProtectedRoute>
+              </AdminRoute>
             }
           />
           <Route
@@ -109,7 +110,7 @@ function App() {
             }
           />
           <Route
-            path="/admin"
+            path="/admin/dashboard"
             element={
               <ProtectedRoute adminOnly={true}>
                 <main className="flex-grow container mx-auto px-4 py-8">
