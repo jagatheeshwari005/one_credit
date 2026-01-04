@@ -56,7 +56,7 @@ router.post(
       const decorationCost = decorationPackages[decorationPackage]?.price || 0;
       const totalAmount = eventCost + decorationCost;
 
-      // Create booking
+      // Create booking in pending state (payment to be completed via QR)
       const booking = new Booking({
         user: req.user.id,
         event: eventId,
@@ -66,15 +66,11 @@ router.post(
         decorationCost,
         specialRequests,
         contactInfo,
-        status: 'confirmed',
-        paymentStatus: 'paid' // Assuming immediate payment for demo
+        status: 'pending',
+        paymentStatus: 'pending'
       });
 
       await booking.save();
-
-      // Update event attendee count
-      event.currentAttendees += attendees;
-      await event.save();
 
       // Populate booking details for response
       await booking.populate([
@@ -94,14 +90,9 @@ router.post(
           specialRequests
         };
 
-        // Send notification to admin
+        // Send notification to admin (customer confirmation will be sent after payment is confirmed)
         sendBookingNotification(bookingData).catch(err => 
           console.error('Failed to send admin notification:', err)
-        );
-
-        // Send confirmation to customer
-        sendBookingConfirmation(bookingData).catch(err => 
-          console.error('Failed to send customer confirmation:', err)
         );
       } catch (emailError) {
         console.error('Email notification error:', emailError);
@@ -109,7 +100,7 @@ router.post(
       }
 
       res.json({
-        msg: 'Booking created successfully',
+        msg: 'Booking created - waiting for payment',
         booking,
         confirmationNumber: booking.confirmationNumber
       });
@@ -200,6 +191,69 @@ router.put('/:bookingId/cancel', auth, async (req, res) => {
 // @access  Public
 router.get('/decoration-packages', (req, res) => {
   res.json(decorationPackages);
+});
+
+// @route   POST api/bookings/:bookingId/confirm-payment
+// @desc    Confirm payment for a pending booking (called by webhook or manual action)
+// @access  Private
+router.post('/:bookingId/confirm-payment', auth, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.bookingId);
+
+    if (!booking) {
+      return res.status(404).json({ msg: 'Booking not found' });
+    }
+
+    if (booking.paymentStatus === 'paid') {
+      return res.status(400).json({ msg: 'Booking already paid' });
+    }
+
+    // Check available spots again before confirming
+    const event = await Event.findById(booking.event);
+    if (!event) {
+      return res.status(404).json({ msg: 'Associated event not found' });
+    }
+
+    const availableSpots = event.maxAttendees - event.currentAttendees;
+    if (booking.attendees > availableSpots) {
+      // Not enough space; cancel booking
+      booking.status = 'cancelled';
+      booking.paymentStatus = 'refunded';
+      await booking.save();
+      return res.status(400).json({ msg: 'Not enough spots available; booking cancelled', booking });
+    }
+
+    // Mark as paid and confirmed
+    booking.paymentStatus = 'paid';
+    booking.status = 'confirmed';
+    await booking.save();
+
+    // Update event attendee count
+    event.currentAttendees += booking.attendees;
+    await event.save();
+
+    // Send email confirmations (async)
+    try {
+      const bookingData = {
+        user: booking.user,
+        event: event,
+        attendees: booking.attendees,
+        totalAmount: booking.totalAmount,
+        bookingId: booking._id,
+        contactInfo: booking.contactInfo,
+        specialRequests: booking.specialRequests
+      };
+      sendBookingNotification(bookingData).catch(err => console.error('Failed admin notify:', err));
+      sendBookingConfirmation(bookingData).catch(err => console.error('Failed user confirm:', err));
+    } catch (emailErr) {
+      console.error('Email after payment error:', emailErr);
+    }
+
+    res.json({ msg: 'Payment confirmed, booking is now confirmed', booking });
+  } catch (err) {
+    console.error('Confirm payment error:', err.message);
+    res.status(500).json({ msg: 'Server error' });
+  }
 });
 
 module.exports = router;

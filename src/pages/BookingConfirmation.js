@@ -9,10 +9,43 @@ const BookingConfirmation = () => {
   const { bookingId } = useParams();
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [polling, setPolling] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(15 * 60); // 15 minutes to pay
 
   useEffect(() => {
     fetchBooking();
   }, [bookingId]);
+
+  useEffect(() => {
+    let intervalId;
+    let pollId;
+    if (booking && booking.paymentStatus === 'pending') {
+      setPolling(true);
+      // Poll booking status every 5 seconds
+      pollId = setInterval(() => {
+        fetchBooking();
+      }, 5000);
+
+      // Countdown timer for payment timeout
+      intervalId = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            // time out: cancel booking automatically via API
+            cancelBooking();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(pollId);
+      clearInterval(intervalId);
+      setPolling(false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [booking]);
 
   const fetchBooking = async () => {
     try {
@@ -47,6 +80,37 @@ const BookingConfirmation = () => {
     }).format(price);
   };
 
+  const cancelBooking = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const config = { headers: { 'x-auth-token': token } };
+      await axios.put(`/api/bookings/${bookingId}/cancel`, {}, config);
+      toast.info('Booking cancelled due to non-payment');
+      fetchBooking();
+    } catch (err) {
+      console.error('Auto-cancel error', err);
+    }
+  };
+
+  const confirmPaymentManually = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const config = { headers: { 'x-auth-token': token } };
+      await axios.post(`/api/bookings/${bookingId}/confirm-payment`, {}, config);
+      toast.success('Payment confirmed');
+      fetchBooking();
+    } catch (err) {
+      const error = err.response?.data?.msg || 'Failed to confirm payment';
+      toast.error(error);
+    }
+  };
+
+  const formatCountdown = (seconds) => {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  };
+
   const getDecorationPackageName = (pkg) => {
     const packages = {
       none: 'No Decoration',
@@ -70,6 +134,9 @@ const BookingConfirmation = () => {
       </div>
     );
   }
+
+  const UPI_ID = 'jagatheeshlogu005-2@oksbi';
+  const qrSrc = '/images/upi_qr.png';
 
   return (
     <div className="booking-confirmation-container">
@@ -95,6 +162,21 @@ const BookingConfirmation = () => {
               Payment: {booking.paymentStatus.charAt(0).toUpperCase() + booking.paymentStatus.slice(1)}
             </span>
           </div>
+          {booking.paymentStatus === 'pending' && (
+            <div className="payment-qr-section">
+              <h4>Pay via UPI</h4>
+              <div className="qr-card">
+                <img src={qrSrc} alt="UPI QR" className="upi-qr-image" />
+                <div className="upi-id">UPI ID: {UPI_ID}</div>
+              </div>
+              <p>Scan the QR code with any UPI app and pay the total amount shown below.</p>
+              <div className="payment-actions">
+                <button onClick={confirmPaymentManually} className="btn-primary">I Have Paid (Confirm)</button>
+                <button onClick={cancelBooking} className="btn-secondary">Cancel Booking</button>
+                <div className="payment-timer">Time left to pay: {formatCountdown(timeLeft)}</div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Event Details */}
